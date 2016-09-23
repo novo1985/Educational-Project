@@ -1,10 +1,8 @@
-#include "Data.h"
+#include "DecisionTree.h"
 
 int main(int argc, char* argv[]) {
   string file_path(argv[1]);
-  Data file(file_path);
-  cout << file.DataToString();
-  file.Calc_Info_Gain();
-  cout << file.print_att_InfoGain() << endl;
+  DecisionTree tree(file_path, " ", 0.1f);
+  tree.buildTree();
   return 0;
 }

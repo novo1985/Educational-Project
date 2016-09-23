@@ -1,6 +1,28 @@
 #include "Data.h"
 #include <cmath>
 
+Data::Data(const Data& previous_data, int index, int value)
+    : att_names(previous_data.get_att_names()) {
+  // constructor, it will create Data class depends on the Three parameters
+  // it is used to create Data of new child nodes
+  // Within Data class, it will automatically initialize rows and att_names to
+  // empty
+  vector<int> temp;
+  for (auto iter = previous_data.get_rows().cbegin();
+       iter != previous_data.get_rows().cend(); ++iter) {
+    if (iter->at(index) == value) {
+      temp = *iter;
+      temp.erase(temp.cbegin() + index);
+      rows.push_back(move(temp));  // Need check
+    }
+  }
+  // att_names is already assigned in the initialization list, just remove the
+  // splitter
+  att_names.erase(att_names.cbegin() + index);
+
+  Calc();
+}
+
 void Data::readData() {
   fstream input;
   string str;
@@ -127,17 +149,23 @@ double Data::get_Entropy(const int& index) {
     }
   }
 
-  P_pp = P_posCount / (P_posCount + P_negCount);
-  P_np = 1 - P_pp;
-  Sp = -P_pp * Log(P_pp) - P_np * Log(P_np);
+  if (P_posCount + P_negCount) {
+    P_pp = P_posCount / (P_posCount + P_negCount);
+    P_np = 1 - P_pp;
+    Sp = -P_pp * Log(P_pp) - P_np * Log(P_np);
+  }
 
-  N_pp = N_posCount / (N_posCount + N_negCount);
-  N_np = 1 - N_pp;
-  Sn = -N_pp * Log(N_pp) - N_np * Log(N_np);
+  if (N_posCount + N_negCount) {
+    N_pp = N_posCount / (N_posCount + N_negCount);
+    N_np = 1 - N_pp;
+    Sn = -N_pp * Log(N_pp) - N_np * Log(N_np);
+  }
 
   double i = P_posCount + P_negCount;
   double j = N_posCount + N_negCount;
-  S = (i / (i + j)) * Sp + (j / (i + j)) * Sn;
+  if (i + j) {
+    S = (i / (i + j)) * Sp + (j / (i + j)) * Sn;
+  }
 
   return S;
 }
@@ -147,4 +175,31 @@ void Data::Calc_Info_Gain() {
   for (int i = 0; i < att_names.size() - 1; i++) {
     att_InfoGain.push_back(TotalEn - get_Entropy(i));
   }
+}
+
+bool Data::pure_labels() const {
+  auto iter = rows.cbegin();
+  int temp = iter->back();
+
+  ++iter;
+  while (iter != rows.cend() && iter->back() == temp) {
+    ++iter;
+  }
+
+  return (iter == rows.cend());
+}
+
+int Data::get_majority_of_data() const {
+  int one_nums = 0;
+  int zero_nums = 0;
+  for (auto iter = rows.cbegin(); iter != rows.cend(); iter++) {
+    if (iter->back() == 1) {
+      one_nums++;
+    }
+    if (iter->back() == 0) {
+      zero_nums++;
+    }
+  }
+
+  return (one_nums >= zero_nums) ? 1 : 0;
 }

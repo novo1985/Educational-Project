@@ -10,14 +10,24 @@ using namespace std;
 
 class Data {
  public:
-  // constructor, and how to use initialization list here?
-  Data(const string& file_name) : filename(file_name) { readData(); };
+  Data(void) {}
+
+  // constructor 1, and how to use initialization list here?
+  Data(const string& file_name) : filename(file_name) {
+    readData();
+    Calc();
+  }
+
+  // constructor 2, using for create new child nodes after splitting.
+  Data(const Data& previous_data, int index, int value);
 
   /* obtain the names of Xi and y of instances, and also get values of
   each instances */
   void readData();
-  vector<vector<int>>& get_rows() { return rows; }
-  vector<string>& get_att_names() { return att_names; }
+
+  const vector<vector<int>>& get_rows() const { return rows; }
+  const vector<string>& get_att_names() const { return att_names; }
+
   string DataToString();
 
   // get the entropy of data set
@@ -25,23 +35,43 @@ class Data {
 
   // For each attribute, we can get the IG
   void Calc_Info_Gain();
-  double get_Info_Gain(const int& index) { return att_InfoGain.at(index); }
+
+  vector<double> att_InfoGain;
+
+  // double get_Info_Gain(const int& index) { return att_InfoGain.at(index); }
+
+  bool pure_labels() const;
+
+  int get_majority_of_data() const;
+
   string print_att_InfoGain() const {
     string str;
-    for (auto iter : att_InfoGain) {
-      str += to_string(iter);
-      str += " ";
+    if (att_InfoGain.size()) {
+      for (auto iter : att_InfoGain) {
+        str += to_string(iter);
+        str += " ";
+      }
+    } else {
+      str += "none";
     }
+
+    str += "\n";
     return str;
-  };
+  }
 
   double Log(const double& value) const { return value ? log2(value) : 0.0f; }
 
  private:
+  void Calc(void) {
+    Calc_Info_Gain();
+    majority = get_majority_of_data();
+  }
+
+ private:
+  int majority;
   string filename;
   vector<vector<int>> rows;
   vector<string> att_names;
-  vector<double> att_InfoGain;
 };
 
 #endif  // DECISION_TREE_DATA_H
