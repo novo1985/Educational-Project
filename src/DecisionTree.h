@@ -15,14 +15,18 @@ class DecisionTree {
   void buildTree() { SplitTree(root_node); }
 
   // print Decision Tree
-  void TreeToString();
+  string PrintTree() {
+    string output;
+    int count = -1;
+    TreeToString(output, root_node, count);
+    return output;
+  }
 
  private:
   void SplitTree(TreeNode* cur_parent);
+  void TreeToString(string& str, TreeNode* current_parent, int count);
 
  private:
-  int index;
-  int leaflabel;
   double P_Factor;
   TreeNode* root_node;
   vector<TreeNode*> leaf_nodes;

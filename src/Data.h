@@ -44,6 +44,8 @@ class Data {
 
   int get_majority_of_data() const;
 
+  int get_majority() const { return majority; }
+
   string print_att_InfoGain() const {
     string str;
     if (att_InfoGain.size()) {

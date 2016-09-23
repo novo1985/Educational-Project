@@ -20,3 +20,25 @@ void DecisionTree::SplitTree(TreeNode* current_parent) {
   SplitTree(res.second);
   cout << "Level " << ++count << endl;
 };
+
+void DecisionTree::TreeToString(string& str, TreeNode* current_parent,
+                                int count) {
+  current_parent->print_TreeNode(str);
+  if (current_parent->get_Left_child()) {
+    int temp = count;
+    temp++;
+    for (int i = 0; i < temp; i++) {
+      str += "| ";
+    }
+    TreeToString(str, current_parent->get_Left_child(), temp);
+  }
+
+  if (current_parent->get_Right_child()) {
+    int temp = count;
+    temp++;
+    for (int i = 0; i < temp; i++) {
+      str += "| ";
+    }
+    TreeToString(str, current_parent->get_Right_child(), temp);
+  }
+}
