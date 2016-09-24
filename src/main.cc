@@ -1,10 +1,12 @@
 #include "DecisionTree.h"
 
 int main(int argc, char* argv[]) {
-  string file_path(argv[1]);
-  DecisionTree tree(file_path, " ", 0.1f);
+  string trainfile_path(argv[1]);
+  string testfile_path(argv[2]);
+  DecisionTree tree(trainfile_path, 0.1f);
   tree.buildTree();
-  string out;
-  cout << tree.PrintTree();
+  Data testfile(testfile_path);
+  tree.TestTree(testfile);
+  cout << tree.summaryTostring();
   return 0;
 }

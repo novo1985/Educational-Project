@@ -14,23 +14,28 @@ typedef pair<TreeNode*, TreeNode*> Children;
 class TreeNode {
  public:
   // constructor using initialization list
-  TreeNode(const int& node_index, Data& train, int index, int value, Data& test,
+  TreeNode(const int& node_index, Data& train, int index, int value,
            const string& splitter_name)
       : splitter_value(value),
         node_index_(node_index),
         Train_Dset(train, index, value),
         leaflabel(-1),
-        splitter(splitter_name){};
+        up_splitter(splitter_name),
+        LeftChild(nullptr),
+        RightChild(nullptr){};
 
-  TreeNode(const int& node_index, const string& trainfile,
-           const string& testfile)
+  TreeNode(const int& node_index, const string& trainfile)
       : splitter_value(-1),
         node_index_(node_index),
         Train_Dset(trainfile),
-        leaflabel(-1){};
+        leaflabel(-1),
+        LeftChild(nullptr),
+        RightChild(nullptr){};
 
   // choosing best IG attribute
   int pick_splitting_attri();
+
+  int get_splitter_index() { return index_splitter; }
 
   string get_name_splitter(int index) {
     return Train_Dset.get_att_names().at(index);
@@ -40,6 +45,8 @@ class TreeNode {
     cout << "Node[" << node_index_
          << "] Information Gain: " << Train_Dset.print_att_InfoGain();
   }
+
+  const bool IsLeaf(void) const { return (leaflabel != -1); }
 
   void make_node_label() { leaflabel = Train_Dset.get_majority_of_data(); }
 
@@ -53,17 +60,27 @@ class TreeNode {
   const int GetNodeIndex() const { return node_index_; }
 
   void print_TreeNode(string& str);
+  const int get_majority() const { return Train_Dset.get_majority(); }
 
   TreeNode* get_Left_child() { return LeftChild; }
   TreeNode* get_Right_child() { return RightChild; }
 
+  const string get_splitter_name() const { return down_splitter; }
+  const long query_original_index(const string& name) const {
+    auto res = find(Train_Dset.get_att_names().cbegin(),
+                    Train_Dset.get_att_names().cend(), name);
+    return distance(Train_Dset.get_att_names().cbegin(), res);
+  }
+  const Data& get_train_data() const { return Train_Dset; }
+
  private:
   int node_index_;
   Data Train_Dset;
-  Data Test_Dset;
   int splitter_value;
   int leaflabel;
-  string splitter;
+  int index_splitter;
+  string up_splitter;
+  string down_splitter;
   TreeNode* RightChild;
   TreeNode* LeftChild;
 };
