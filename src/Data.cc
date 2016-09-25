@@ -29,10 +29,7 @@ void Data::readData() {
   input.open(filename);
 
   if (!input.is_open()) {
-    input.clear();
-    input.open(filename, std::ios::out);  // Create file.
-    input.close();
-    input.open(filename);
+    throw runtime_error("Wrong file path: " + filename + "\n");
   }
 
   // iteratively get each line and store it into string str.

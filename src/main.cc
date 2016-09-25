@@ -1,23 +1,40 @@
 #include "DecisionTree.h"
 
 int main(int argc, char* argv[]) {
-  // TODO: handling error
-  string trainfile_path(argv[1]);
-  string testfile_path(argv[2]);
-  Data testfile(testfile_path);
-  Data trainfile(trainfile_path);
+  double pruning_factor(0.0f);
+  if (argc != 4) {
+    cerr << "Wrong parameters!\n";
+    return -1;
+  } else {
+    pruning_factor = stod(argv[3]);
+  }
 
-  DecisionTree tree(trainfile_path, stod(argv[3]));
-  tree.buildTree();
+  if (pruning_factor < 0.0f || pruning_factor >= 1.0f) {
+    cerr << "pruning factor: " << pruning_factor << " is out of range!\n";
+    return -1;
+  }
 
-  tree.TestTree(trainfile, false);
-  tree.TestTree(testfile, true);
-  cout << tree.summaryTostring();
+  try {
+    Data trainfile(argv[1]);
+    Data testfile(argv[2]);
 
-  tree.prune_tree();
+    DecisionTree tree(argv[1], pruning_factor);
+    tree.buildTree();
 
-  tree.TestTree(trainfile, false);
-  tree.TestTree(testfile, true);
-  cout << tree.summaryTostring();
+    tree.TestTree(trainfile, false);
+    tree.TestTree(testfile, true);
+    cout << tree.summaryTostring();
+
+    tree.prune_tree();
+
+    tree.TestTree(trainfile, false);
+    tree.TestTree(testfile, true);
+    cout << tree.summaryTostring();
+  } catch (runtime_error& err) {
+    cerr << err.what();
+  } catch (...) {
+    cerr << "Some error happened, aborted!\n";
+  }
+
   return 0;
 }

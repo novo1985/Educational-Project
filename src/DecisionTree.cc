@@ -136,14 +136,20 @@ void DecisionTree::prune_tree() {
   pruned = true;
   unsigned int index_del;
   int prune_num = static_cast<int>(ceil(P_Factor * count_of_nodes));
-  vector<pair<int, TreeNode*>> temp(pointer_array);
+  vector<pair<int, TreeNode*>> prune_array(pointer_array);
+
+  if (prune_num > prune_array.size()) {
+    throw runtime_error(
+        "Pruning nodes exceed total number of nodes. Aborted!\n");
+  }
+
   for (int i = 0; i < prune_num; i++) {
-    index_del = distribution(random_eng) % temp.size();
+    index_del = distribution(random_eng) % prune_array.size();
 #if DEBUG
     cout << "p index = " << temp.at(index_del).first << endl;
 #endif
-    temp.at(index_del).second->set_pruneflag(true);
-    temp.erase(temp.cbegin() + index_del);
+    prune_array.at(index_del).second->set_pruneflag(true);
+    prune_array.erase(prune_array.cbegin() + index_del);
   }
 }
 
