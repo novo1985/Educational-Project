@@ -1,6 +1,7 @@
 #ifndef DECISION_TREE_TREENODE_H
 #define DECISION_TREE_TREENODE_H
 
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <utility>
