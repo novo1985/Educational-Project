@@ -32,6 +32,9 @@ class DecisionTree {
   // print Decision Tree
   string PrintTree() {
     string output("\n");
+    output += (pruned ? "Post" : "Pre");
+    output += "-Pruned Decision Tree Model\n";
+    output += "-------------------------------------\n";
     int count = -1;
     TreeToString(output, root_node, count);
     output += "\n";
