@@ -9,7 +9,7 @@
 
 class TreeNode;
 
-typedef pair<TreeNode*, TreeNode*> Children;
+typedef pair<pair<int, TreeNode*>, pair<int, TreeNode*>> Children;
 
 class TreeNode {
  public:
@@ -22,7 +22,9 @@ class TreeNode {
         leaflabel(-1),
         up_splitter(splitter_name),
         LeftChild(nullptr),
-        RightChild(nullptr){};
+        RightChild(nullptr),
+        Parent(nullptr),
+        Prune_Flag(false){};
 
   TreeNode(const int& node_index, const string& trainfile)
       : splitter_value(-1),
@@ -30,7 +32,9 @@ class TreeNode {
         Train_Dset(trainfile),
         leaflabel(-1),
         LeftChild(nullptr),
-        RightChild(nullptr){};
+        RightChild(nullptr),
+        Parent(nullptr),
+        Prune_Flag(false){};
 
   // choosing best IG attribute
   int pick_splitting_attri();
@@ -73,6 +77,13 @@ class TreeNode {
   }
   const Data& get_train_data() const { return Train_Dset; }
 
+  void set_parent(TreeNode* Parent_pointer) { Parent = Parent_pointer; }
+  TreeNode* get_parent() const { return Parent; }
+
+  void set_pruneflag(bool flag) { Prune_Flag = flag; }
+
+  const bool get_pruneflag() const { return Prune_Flag; }
+
  private:
   int node_index_;
   Data Train_Dset;
@@ -83,6 +94,8 @@ class TreeNode {
   string down_splitter;
   TreeNode* RightChild;
   TreeNode* LeftChild;
+  TreeNode* Parent;
+  bool Prune_Flag;
 };
 
 #endif  // DECISION_TREE_TREENODE_H

@@ -1,12 +1,23 @@
 #include "DecisionTree.h"
 
 int main(int argc, char* argv[]) {
+  // TODO: handling error
   string trainfile_path(argv[1]);
   string testfile_path(argv[2]);
-  DecisionTree tree(trainfile_path, 0.1f);
-  tree.buildTree();
   Data testfile(testfile_path);
-  tree.TestTree(testfile);
+  Data trainfile(trainfile_path);
+
+  DecisionTree tree(trainfile_path, stod(argv[3]));
+  tree.buildTree();
+
+  tree.TestTree(trainfile, false);
+  tree.TestTree(testfile, true);
+  cout << tree.summaryTostring();
+
+  tree.prune_tree();
+
+  tree.TestTree(trainfile, false);
+  tree.TestTree(testfile, true);
   cout << tree.summaryTostring();
   return 0;
 }

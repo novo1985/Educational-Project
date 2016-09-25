@@ -12,7 +12,7 @@ int TreeNode::pick_splitting_attri() {
   return index_splitter;
 }
 
-pair<TreeNode*, TreeNode*> TreeNode::splitting_update() {
+Children TreeNode::splitting_update() {
   int index = pick_splitting_attri();
   down_splitter = get_name_splitter(index);
 
@@ -23,11 +23,13 @@ pair<TreeNode*, TreeNode*> TreeNode::splitting_update() {
   // new two child nodes
   TreeNode* Left_Node =
       new TreeNode(node_index_ * 2 + 1, Train_Dset, index, 0, down_splitter);
+  Left_Node->set_parent(this);
 #ifdef DEBUG
   cout << "left child: " << Left_Node->InfoGainToString();
 #endif
   TreeNode* Right_Node =
       new TreeNode(node_index_ * 2 + 2, Train_Dset, index, 1, down_splitter);
+  Right_Node->set_parent(this);
 #ifdef DEBUG
   cout << "right child: " << Right_Node->InfoGainToString();
 #endif
@@ -35,7 +37,8 @@ pair<TreeNode*, TreeNode*> TreeNode::splitting_update() {
   LeftChild = Left_Node;
   RightChild = Right_Node;
 
-  return make_pair(LeftChild, RightChild);
+  return make_pair(make_pair(node_index_ * 2 + 1, LeftChild),
+                   make_pair(node_index_ * 2 + 2, RightChild));
 }
 
 void TreeNode::print_TreeNode(string& str) {
