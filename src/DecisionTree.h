@@ -56,14 +56,13 @@ class DecisionTree {
   void TreeToString(string& str, TreeNode* current_parent, int count);
 
  private:
+  TreeNode* root_node;
   double P_Factor;
   int count_of_nodes;
   int num_of_leafnodes;
-  TreeNode* root_node;
   vector<TreeNode*> leaf_nodes;
   double train_accuracy;
   double test_accuracy;
-
   int num_of_instance_test;
   int num_of_attri_test;
   vector<pair<int, TreeNode*>> pointer_array;

@@ -171,7 +171,7 @@ double Data::get_Entropy(const int& index) {
 
 void Data::Calc_Info_Gain() {
   double TotalEn = get_Entropy(-1);
-  for (int i = 0; i < att_names.size() - 1; i++) {
+  for (unsigned int i = 0; i < att_names.size() - 1; i++) {
     att_InfoGain.push_back(TotalEn - get_Entropy(i));
   }
 }

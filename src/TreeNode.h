@@ -86,17 +86,17 @@ class TreeNode {
   const bool get_pruneflag() const { return Prune_Flag; }
 
  private:
+  int splitter_value;
   int node_index_;
   Data Train_Dset;
-  int splitter_value;
   int leaflabel;
-  int index_splitter;
   string up_splitter;
   string down_splitter;
-  TreeNode* RightChild;
   TreeNode* LeftChild;
+  TreeNode* RightChild;
   TreeNode* Parent;
   bool Prune_Flag;
+  int index_splitter;
 };
 
 #endif  // DECISION_TREE_TREENODE_H
