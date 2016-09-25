@@ -15,19 +15,18 @@ int main(int argc, char* argv[]) {
   }
 
   try {
-    Data trainfile(argv[1]);
     Data testfile(argv[2]);
 
     DecisionTree tree(argv[1], pruning_factor);
     tree.buildTree();
 
-    tree.TestTree(trainfile, false);
+    tree.TestTrain();
     tree.TestTree(testfile, true);
     cout << tree.summaryTostring();
 
     tree.prune_tree();
 
-    tree.TestTree(trainfile, false);
+    tree.TestTrain();
     tree.TestTree(testfile, true);
     cout << tree.summaryTostring();
   } catch (runtime_error& err) {

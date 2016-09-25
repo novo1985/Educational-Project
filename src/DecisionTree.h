@@ -37,6 +37,8 @@ class DecisionTree {
     output += "\n";
     return output;
   }
+
+  void TestTrain() { TestTree(root_node->get_train_data(), false); }
   void TestTree(const Data& Test_Data, bool test);
 
   string summaryTostring();
