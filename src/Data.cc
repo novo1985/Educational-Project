@@ -1,5 +1,7 @@
 #include "Data.h"
 #include <cmath>
+#include <vector>
+#include <stdexcept>
 
 Data::Data(const Data& previous_data, int index, int value)
     : att_names(previous_data.get_att_names()) {
@@ -12,13 +14,13 @@ Data::Data(const Data& previous_data, int index, int value)
        iter != previous_data.get_rows().cend(); ++iter) {
     if (iter->at(index) == value) {
       temp = *iter;
-      temp.erase(temp.cbegin() + index);
+      temp.erase(temp.begin() + index);
       rows.push_back(move(temp));  // Need check
     }
   }
   // att_names is already assigned in the initialization list, just remove the
   // splitter
-  att_names.erase(att_names.cbegin() + index);
+  att_names.erase(att_names.begin() + index);
 
   Calc();
 }

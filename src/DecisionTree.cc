@@ -149,7 +149,7 @@ void DecisionTree::prune_tree() {
     cout << "p index = " << temp.at(index_del).first << endl;
 #endif
     prune_array.at(index_del).second->set_pruneflag(true);
-    prune_array.erase(prune_array.cbegin() + index_del);
+    prune_array.erase(prune_array.begin() + index_del);
   }
 }
 
