@@ -175,6 +175,10 @@ void Data::Calc_Info_Gain() {
 }
 
 bool Data::pure_labels() const {
+  if (rows.empty()) {
+    return true;
+  }
+
   auto iter = rows.cbegin();
   int temp = iter->back();
 
