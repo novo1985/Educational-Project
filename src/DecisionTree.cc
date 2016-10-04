@@ -19,6 +19,21 @@ void DecisionTree::SplitTree(TreeNode* current_parent) {
   pointer_array.push_back(res.second);
 };
 
+void DecisionTree::random_SplitTree(TreeNode* cur_parent){
+  if (cur_parent->get_size_of_attribute() == 0 ||
+      cur_parent->node_pure()) {
+    cur_parent->make_node_label();
+    leaf_nodes.push_back(cur_parent);
+    return;
+  }
+
+  Children res = cur_parent->random_splitting_and_update();
+  random_SplitTree(res.first.second);
+  pointer_array.push_back(res.first);
+  random_SplitTree(res.second.second);
+  pointer_array.push_back(res.second);
+}
+
 void DecisionTree::TreeToString(string& str, TreeNode* current_parent,
                                 int count) {
   if (current_parent->get_pruneflag()) {

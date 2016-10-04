@@ -29,6 +29,9 @@ class DecisionTree {
   // create Decision tree
   void buildTree() { SplitTree(root_node); }
 
+  // build random tree
+  void random_buildTree(){random_SplitTree(root_node);}
+
   // print Decision Tree
   string PrintTree() {
     string output("\n");
@@ -53,6 +56,7 @@ class DecisionTree {
 
  private:
   void SplitTree(TreeNode* cur_parent);
+  void random_SplitTree(TreeNode* cur_parent);
   void TreeToString(string& str, TreeNode* current_parent, int count);
 
  private:
