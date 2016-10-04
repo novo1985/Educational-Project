@@ -60,6 +60,12 @@ class TreeNode {
   // splitting node and create two new child TreeNodes
   Children splitting_update();
 
+  //get random index
+  int random_index_of_splitter();
+
+  // randomly splitting
+  Children random_splitting_and_update();
+
   bool node_pure() const { return Train_Dset.pure_labels(); }
 
   const int GetNodeIndex() const { return node_index_; }
