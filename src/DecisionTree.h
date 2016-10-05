@@ -7,11 +7,12 @@
 class DecisionTree {
  public:
   // constructor using initialization list
-  DecisionTree(const string& TrainData_path, double pf)
+  DecisionTree(const string& TrainData_path, double pf = 1.0f)
       : root_node(new TreeNode(0, TrainData_path)),
         P_Factor(pf),
         count_of_nodes(0),
         num_of_leafnodes(0),
+        sum_depth_(0),
         train_accuracy(0.0f),
         test_accuracy(0.0f),
         pruned(false),
@@ -30,7 +31,7 @@ class DecisionTree {
   void buildTree() { SplitTree(root_node); }
 
   // build random tree
-  void random_buildTree(){random_SplitTree(root_node);}
+  void random_buildTree() { random_SplitTree(root_node); }
 
   // print Decision Tree
   string PrintTree() {
@@ -52,7 +53,7 @@ class DecisionTree {
   void prune_tree();
 
   void statistic_nodes(TreeNode* current_parent);
-  void statistic_leafnodes(TreeNode* current_parent);
+  void statistic_leafnodes(TreeNode* current_parent, int sum_depth);
 
  private:
   void SplitTree(TreeNode* cur_parent);
@@ -64,6 +65,7 @@ class DecisionTree {
   double P_Factor;
   int count_of_nodes;
   int num_of_leafnodes;
+  int sum_depth_;
   vector<TreeNode*> leaf_nodes;
   double train_accuracy;
   double test_accuracy;

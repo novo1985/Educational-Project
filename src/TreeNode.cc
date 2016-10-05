@@ -1,6 +1,6 @@
 #include "TreeNode.h"
 #include <algorithm>
-#include<random>
+#include <random>
 
 int TreeNode::pick_splitting_attri() {
   // get the index of the attribute
@@ -42,27 +42,23 @@ Children TreeNode::splitting_update() {
                    make_pair(node_index_ * 2 + 2, RightChild));
 }
 
-int TreeNode::random_index_of_splitter() {
-  std::random_device random_device1;
-  std::mt19937 engine{random_device1};
-  std::uniform_int_distribution<int>dist(0, Train_Dset.get_att_names().size()-1);
-  int index = dist(engine);
-  return index;
+unsigned int TreeNode::random_index_of_splitter() {
+  return distribution_(random_eng_) % (Train_Dset.get_att_names().size() - 1);
 }
 
-Children TreeNode::random_splitting_and_update(){
+Children TreeNode::random_splitting_and_update() {
   int index = random_index_of_splitter();
   down_splitter = get_name_splitter(index);
 
   // new two child nodes
   TreeNode* Left_Node =
-    new TreeNode(node_index_ * 2 + 1, Train_Dset, index, 0, down_splitter);
+      new TreeNode(node_index_ * 2 + 1, Train_Dset, index, 0, down_splitter);
   Left_Node->set_parent(this);
 #ifdef DEBUG
   cout << "left child: " << Left_Node->InfoGainToString();
 #endif
   TreeNode* Right_Node =
-    new TreeNode(node_index_ * 2 + 2, Train_Dset, index, 1, down_splitter);
+      new TreeNode(node_index_ * 2 + 2, Train_Dset, index, 1, down_splitter);
   Right_Node->set_parent(this);
 #ifdef DEBUG
   cout << "right child: " << Right_Node->InfoGainToString();
@@ -73,7 +69,6 @@ Children TreeNode::random_splitting_and_update(){
 
   return make_pair(make_pair(node_index_ * 2 + 1, LeftChild),
                    make_pair(node_index_ * 2 + 2, RightChild));
-
 }
 
 void TreeNode::print_TreeNode(string& str) {

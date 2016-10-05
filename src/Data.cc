@@ -1,7 +1,7 @@
 #include "Data.h"
 #include <cmath>
-#include <vector>
 #include <stdexcept>
+#include <vector>
 
 Data::Data(const Data& previous_data, int index, int value)
     : att_names(previous_data.get_att_names()) {

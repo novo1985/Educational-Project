@@ -25,7 +25,10 @@ class TreeNode {
         LeftChild(nullptr),
         RightChild(nullptr),
         Parent(nullptr),
-        Prune_Flag(false){};
+        Prune_Flag(false),
+        distribution_(1, 1000) {
+    random_eng_.seed(random_device()());
+  };
 
   TreeNode(const int& node_index, const string& trainfile)
       : splitter_value(-1),
@@ -35,7 +38,10 @@ class TreeNode {
         LeftChild(nullptr),
         RightChild(nullptr),
         Parent(nullptr),
-        Prune_Flag(false){};
+        Prune_Flag(false),
+        distribution_(1, 1000) {
+    random_eng_.seed(random_device()());
+  };
 
   // choosing best IG attribute
   int pick_splitting_attri();
@@ -60,8 +66,8 @@ class TreeNode {
   // splitting node and create two new child TreeNodes
   Children splitting_update();
 
-  //get random index
-  int random_index_of_splitter();
+  // get random index
+  unsigned int random_index_of_splitter();
 
   // randomly splitting
   Children random_splitting_and_update();
@@ -103,6 +109,9 @@ class TreeNode {
   TreeNode* Parent;
   bool Prune_Flag;
   int index_splitter;
+
+  mt19937 random_eng_;
+  uniform_int_distribution<mt19937::result_type> distribution_;
 };
 
 #endif  // DECISION_TREE_TREENODE_H

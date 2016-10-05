@@ -19,9 +19,8 @@ void DecisionTree::SplitTree(TreeNode* current_parent) {
   pointer_array.push_back(res.second);
 };
 
-void DecisionTree::random_SplitTree(TreeNode* cur_parent){
-  if (cur_parent->get_size_of_attribute() == 0 ||
-      cur_parent->node_pure()) {
+void DecisionTree::random_SplitTree(TreeNode* cur_parent) {
+  if (cur_parent->get_size_of_attribute() == 0 || cur_parent->node_pure()) {
     cur_parent->make_node_label();
     leaf_nodes.push_back(cur_parent);
     return;
@@ -119,8 +118,12 @@ string DecisionTree::summaryTostring() {
   stringstream sstr;
   count_of_nodes = 0;
   num_of_leafnodes = 0;
+  sum_depth_ = 0;
+  int count = 0;
   statistic_nodes(root_node);
-  statistic_leafnodes(root_node);
+  statistic_leafnodes(root_node, count);
+  double avg_depth =
+      static_cast<double>(sum_depth_) / static_cast<double>(num_of_leafnodes);
 
   sstr << PrintTree();
   sstr << (pruned ? "Post" : "Pre");
@@ -136,7 +139,11 @@ string DecisionTree::summaryTostring() {
        << count_of_nodes << "\n"
                             "Number of leaf nodes in the tree = "
        << num_of_leafnodes << "\n"
-                              "Accuracy of the model on the training dataset = "
+                              "Sum of Depth = "
+       << sum_depth_ << "\n"
+                        "Average Depth = "
+       << avg_depth << "\n"
+                       "Accuracy of the model on the training dataset = "
        << train_accuracy * 100 << "%\n"
                                   "Number of testing instances = "
        << num_of_instance_test << "\n"
@@ -150,7 +157,8 @@ string DecisionTree::summaryTostring() {
 void DecisionTree::prune_tree() {
   pruned = true;
   unsigned int index_del;
-  unsigned int prune_num = static_cast<unsigned int>(ceil(P_Factor * count_of_nodes));
+  unsigned int prune_num =
+      static_cast<unsigned int>(ceil(P_Factor * count_of_nodes));
   vector<pair<int, TreeNode*>> prune_array(pointer_array);
 
   if (prune_num > prune_array.size()) {
@@ -182,7 +190,8 @@ void DecisionTree::statistic_nodes(TreeNode* current_parent) {
   }
 }
 
-void DecisionTree::statistic_leafnodes(TreeNode* current_parent) {
+void DecisionTree::statistic_leafnodes(TreeNode* current_parent, int depth) {
+  depth++;
   if (!current_parent->get_pruneflag()) {
     TreeNode* temp = current_parent;
 
@@ -190,9 +199,10 @@ void DecisionTree::statistic_leafnodes(TreeNode* current_parent) {
       temp = temp->get_Left_child();
 
       if (temp->IsLeaf()) {
+        sum_depth_ += depth;
         num_of_leafnodes++;
       } else {
-        statistic_leafnodes(temp);
+        statistic_leafnodes(temp, depth);
       }
     }
 
@@ -202,9 +212,10 @@ void DecisionTree::statistic_leafnodes(TreeNode* current_parent) {
       temp = temp->get_Right_child();
 
       if (temp->IsLeaf()) {
+        sum_depth_ += depth;
         num_of_leafnodes++;
       } else {
-        statistic_leafnodes(temp);
+        statistic_leafnodes(temp, depth);
       }
     }
   }
